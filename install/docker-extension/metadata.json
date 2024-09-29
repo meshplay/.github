@@ -1,0 +1,34 @@
+{
+  "icon": "meshplay-logo-light.svg",
+  "vm": {
+    "composefile": "docker-compose.yaml"
+  },
+  "ui": {
+    "dashboard-tab": {
+      "title": "Meshplay",
+      "src": "/index.html",
+      "root": "/ui"
+    }
+  },
+  "host": {
+    "binaries": [
+      {
+        "darwin": [
+          {
+            "path": "/meshplayctl/darwin/meshplayctl"
+          }
+        ],
+        "windows": [
+          {
+            "path": "/meshplayctl/windows/meshplayctl.exe"
+          }
+        ],
+        "linux": [
+          {
+            "path": "/meshplayctl/linux/meshplayctl"
+          }
+        ]
+      }
+    ]
+  }
+}

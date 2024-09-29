@@ -1,0 +1,39 @@
+contexts:
+    local:
+        endpoint: http://localhost:9081
+        token: default
+        platform: kubernetes
+        components:
+            - meshplay-app-mesh
+            - meshplay-istio
+            - meshplay-linkerd
+            - meshplay-consul
+            - meshplay-nsm
+            - meshplay-kuma
+            - meshplay-osm
+            - meshplay-traefik-mesh
+            - meshplay-nginx-sm
+            - meshplay-cilium
+        channel: stable
+        version: latest
+    local2:
+        endpoint: http://localhost:9081
+        token: default
+        platform: kubernetes
+        components:
+            - meshplay-app-mesh
+            - meshplay-istio
+            - meshplay-linkerd
+            - meshplay-consul
+            - meshplay-nsm
+            - meshplay-kuma
+            - meshplay-osm
+            - meshplay-traefik-mesh
+            - meshplay-nginx-sm
+            - meshplay-cilium
+        channel: edge
+        version: latest
+current-context: local2
+tokens:
+    - name: default
+      location: auth.json

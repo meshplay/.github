@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ../docker-compose.yaml
+    kompose.version: 1.32.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: meshplay-traefik-mesh
+  name: meshplay-traefik-mesh
+spec:
+  selector:
+    matchLabels:
+      io.kompose.service: meshplay-traefik-mesh
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: meshplay-traefik-mesh
+    spec:
+      serviceAccount: meshplay-server
+      containers:
+      - image: khulnasoft/meshplay-traefik-mesh:stable-latest
+        imagePullPolicy: Always
+        name: meshplay-traefik-mesh
+        ports:
+        - containerPort: 10006
+        resources: {}
+      restartPolicy: Always
+status: {}

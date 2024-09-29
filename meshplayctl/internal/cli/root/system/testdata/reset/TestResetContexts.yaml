@@ -1,0 +1,29 @@
+contexts:
+    local:
+        endpoint: http://localhost:9081
+        token: default
+        platform: kubernetes
+        components:
+            - meshplay-app-mesh
+            - meshplay-istio
+            - meshplay-linkerd
+            - meshplay-consul
+            - meshplay-nsm
+            - meshplay-kuma
+            - meshplay-traefik-mesh
+            - meshplay-nginx-sm
+            - meshplay-cilium
+        channel: stable
+        version: latest
+        provider: Meshplay
+    local2:
+        endpoint: http://localhost:9081
+        token: default
+        platform: docker
+        channel: stable
+        version: latest
+        provider: Meshplay
+current-context: local2
+tokens:
+    - name: default
+      location: auth.json

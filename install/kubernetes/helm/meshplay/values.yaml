@@ -1,0 +1,172 @@
+# Default values for meshplay.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+restartPolicy: Always
+metadata:
+  name: meshplay
+image:
+  repository: khulnasoft/meshplay
+  tag: stable-latest
+  pullPolicy: Always
+
+env:
+  EVENT: meshplayLocal
+  PROVIDER_BASE_URLS: https://meshplay.khulnasoft.com
+  ADAPTER_URLS: meshplay-istio:10000 meshplay-linkerd:10001 meshplay-consul:10002 meshplay-kuma:10007 meshplay-nginx-sm:10010 meshplay-nsm:10004 meshplay-app-mesh:10005 meshplay-traefik-mesh:10006 meshplay-cilium:10012
+  PROVIDER: ""
+  MESHPLAY_SERVER_CALLBACK_URL: ""
+probe:
+  #TODO: Need to confirm the health check path of meshplay.
+  livenessProbe:
+    enabled: false
+  readinessProbe:
+    enabled: false
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+# For AKS AWS GCP to get the permissions to watch the nodes
+rbac:
+  nodes: false
+
+serviceAccount:
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: "meshplay-server"
+
+podSecurityContext:
+  {}
+  # fsGroup: 2000
+
+annotations: {}
+
+securityContext:
+  {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: LoadBalancer
+  port: 9081
+  target_port: 8080
+  annotations: {}
+
+ingress:
+  enabled: false
+  ingressClassName:
+  apiVersion:
+  annotations:
+    {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+
+  ## apiVersion:
+
+  hosts:
+    - host: meshplay.local
+      paths:
+        - path: /
+          pathType: Prefix
+
+      ## For Kubernetes >= 1.18 you should specify the pathType (determines how Ingress paths should be matched)
+      ## See https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/#better-path-matching-with-path-types
+
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+
+resources:
+  {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# By default, the adapters need to have the same cluster role as the meshplay to have permissions for performing necessary operations
+
+# If need to use a different service accounts for the adapters, modify the serviceAccountNameOverride for the corresponding adapters here,
+# or set the serviceAccountNameOverride to empty while setting the serviceAccount information in the sub-chart accordingly
+meshplay-app-mesh:
+  enabled: false
+  fullnameOverride: meshplay-app-mesh
+  serviceAccountNameOverride: meshplay-server
+
+meshplay-istio:
+  enabled: false
+  fullnameOverride: meshplay-istio
+  serviceAccountNameOverride: meshplay-server
+
+meshplay-linkerd:
+  enabled: false
+  fullnameOverride: meshplay-linkerd
+  serviceAccountNameOverride: meshplay-server
+
+meshplay-consul:
+  enabled: false
+  fullnameOverride: meshplay-consul
+  serviceAccountNameOverride: meshplay-server
+
+meshplay-kuma:
+  enabled: false
+  fullnameOverride: meshplay-kuma
+  serviceAccountNameOverride: meshplay-server
+
+meshplay-nsm:
+  enabled: false
+  fullnameOverride: meshplay-nsm
+  serviceAccountNameOverride: meshplay-server
+
+meshplay-nginx-sm:
+  enabled: false
+  fullnameOverride: meshplay-nginx-sm
+  serviceAccountNameOverride: meshplay-server
+
+meshplay-traefik-mesh:
+  enabled: false
+  fullnameOverride: meshplay-traefik-mesh
+  serviceAccountNameOverride: meshplay-server
+
+meshplay-cilium:
+  enabled: false
+  fullnameOverride: meshplay-cilium
+
+meshplay-nighthawk:
+  enabled: false
+  fullnameOverride: meshplay-nighthawk
+  serviceAccountNameOverride: meshplay-server
+
+# If there need the test cases set it as true.
+#
+testCase:
+  enabled: false
+
+# # TODO: There need to confirm that we should deploy the Gateway and VirtualService for Meshplay or not.
+# There will be an issue when deploying Meshplay before Istio and this could make the deploying fail.
+# meshplay-gateway
+#
+meshplaygateway:
+  enabled: false
+  selector:
+    istio: ingressgateway
+

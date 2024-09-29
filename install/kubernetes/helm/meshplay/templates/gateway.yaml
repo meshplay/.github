@@ -1,0 +1,16 @@
+{{- if .Values.meshplaygateway.enabled -}}
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: meshplay-gateway
+spec:
+  selector:
+    {{- toYaml .Values.meshplaygateway.selector| nindent 4 }}
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+{{- end -}}

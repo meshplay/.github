@@ -1,0 +1,25 @@
+contexts:
+  local:
+    endpoint: http://localhost:9081
+    token: default
+    platform: kubernetes
+    components:
+      - meshplay-istio
+    channel: stable
+    version: latest
+    provider: Meshplay
+  local2:
+    endpoint: http://localhost:32242
+    token: default2
+    platform: docker
+    components:
+      - meshplay-istio
+    channel: stable
+    version: latest
+    provider: Meshplay
+current-context: local
+tokens:
+  - location: auth.json
+    name: default
+  - location: auth.json
+    name: default2

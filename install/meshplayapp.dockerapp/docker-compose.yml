@@ -1,0 +1,54 @@
+version: '3.7'
+services:
+  meshplay:
+    image: khulnasoft/meshplay:stable-latest
+    labels:
+      - ${labels.watchtower}
+    environment:
+      - "PROVIDER_BASE_URLS=https://meshplay.khulnasoft.com"
+      - "ADAPTER_URLS=meshplay-istio:10000 meshplay-linkerd:10001 meshplay-consul:10002 meshplay-nsm:10004"
+      - "EVENT=meshplayLocal"
+    ports:
+      - "${meshplay.port}:8080"
+  meshplay-istio:
+    image: khulnasoft/meshplay-istio:stable-latest
+    labels:
+      - ${labels.watchtower}
+    ports:
+      - "${istio.port}:10000"
+    x-enabled: ${istio.enabled}
+  meshplay-linkerd:
+    image: khulnasoft/meshplay-linkerd:stable-latest
+    labels:
+      - ${labels.watchtower}
+    ports:
+      - "${linkerd.port}:10001"
+    x-enabled: ${linkerd.enabled}
+  meshplay-consul:
+    image: khulnasoft/meshplay-consul:stable-latest
+    labels:
+      - ${labels.watchtower}
+    ports:
+      - "${consul.port}:10002"
+    x-enabled: ${consul.enabled}
+  meshplay-nsm:
+    image: khulnasoft/meshplay-nsm:stable-latest
+    labels:
+      - ${labels.watchtower}
+    ports:
+      - "${nsm.port}:10004"
+    x-enabled: ${nsm.enabled}
+  meshplay-nighthawk:
+    image: meshplay/meshplay-nighthawk:edge-latest
+    labels:
+      - ${labels.watchtower}
+    ports:
+      - "${nighthwak.port}:10013"
+    x-enabled: ${nighthawk.enabled}
+  watchtower:
+    image: containrrr/watchtower
+    labels:
+      - ${labels.watchtower}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --label-enable

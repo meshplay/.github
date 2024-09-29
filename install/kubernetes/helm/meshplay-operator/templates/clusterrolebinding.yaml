@@ -1,0 +1,61 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: meshplay-leader-election-rolebinding
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{- include "meshplay-operator.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: meshplay-leader-election-role
+subjects:
+- kind: ServiceAccount
+  name: meshplay-operator
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: meshplay-operator-rolebinding
+  labels:
+{{- include "meshplay-operator.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: meshplay-operator-role
+subjects:
+- kind: ServiceAccount
+  name: meshplay-operator
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: meshplay-proxy-rolebinding
+  labels:
+{{- include "meshplay-operator.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: meshplay-proxy-role
+subjects:
+- kind: ServiceAccount
+  name: meshplay-operator
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: meshplay-controller-rolebinding
+  labels:
+  {{- include "meshplay-operator.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: meshplay-controller-role
+subjects:
+  - kind: ServiceAccount
+    name: meshplay-operator
+    namespace: {{ .Release.Namespace }}

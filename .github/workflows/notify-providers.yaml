@@ -1,0 +1,37 @@
+name: Notify Remote Providers
+on:
+  push:
+#     branches:
+#       - 'master'
+    tags:
+      - 'v*'
+    paths-ignore:
+      - 'docs/**'
+      - 'meshplayctl/**'
+
+jobs:
+  notify-meshmap-build:
+    name: Notify Meshmap Build
+    if: github.repository == 'meshplay/meshplay'
+    runs-on: ubuntu-22.04
+    steps:
+    - name: trigger plugins for edge
+      if: startsWith(github.ref, 'refs/tags/') != true && success()
+      uses: khulnasoft/trigger-remote-provider-action@master
+      with:
+        name: "Build and Publish"
+        repo: khulnasoft/meshplay-extensions
+        token: ${{ secrets.GH_ACCESS_TOKEN }}
+        version: master
+    - name: set env
+      if: github.event_name != 'pull_request' && startsWith(github.ref, 'refs/tags/') && success()
+      id: vars
+      run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+    - name: trigger plugins for release
+      if: github.event_name != 'pull_request' && startsWith(github.ref, 'refs/tags/') && success()
+      uses: khulnasoft/trigger-remote-provider-action@master
+      with:
+        name: "Build and Publish"
+        repo: khulnasoft/meshplay-extensions
+        token: ${{ secrets.GH_ACCESS_TOKEN }}
+        version: ${{ steps.vars.outputs.tag }}

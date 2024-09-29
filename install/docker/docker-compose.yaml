@@ -1,0 +1,27 @@
+version: "3"
+services:
+  meshplay:
+    image: khulnasoft/meshplay:stable-latest
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    environment:
+      - "PROVIDER_BASE_URLS=https://meshplay.khulnasoft.com"
+      # - "ADAPTER_URLS=meshplay-istio:10000 meshplay-linkerd:10001 meshplay-consul:10002 meshplay-nsm:10004 meshplay-app-mesh:10005 meshplay-kuma:10007 meshplay-traefik-mesh:10006 meshplay-nginx-sm:10010 meshplay-cilium:10012"
+      - "EVENT=meshplayLocal"
+      - "KUBECONFIG_FOLDER=/home/appuser/.kube"
+      - "PORT=9081"
+    volumes:
+      - $HOME/.kube:/home/appuser/.kube:ro
+      - $HOME/.minikube:$HOME/.minikube:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "9081:9081"
+  watchtower:
+    image: containrrr/watchtower
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --label-enable
+volumes:
+  meshplay-config:

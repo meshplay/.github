@@ -1,0 +1,12 @@
+# Version of the application
+version: 0.2.0
+# Name of the application
+name: meshplayapp
+# A short description of the application
+description: Meshplay by Docker App
+# List of application maintainers with name and email for each
+maintainers:
+  - name: nunix
+    email: nunix@khulnasoft.com
+  - name: leecalcote
+    email: leecalcote@gmail.com

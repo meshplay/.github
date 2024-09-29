@@ -1,0 +1,30 @@
+services:
+    meshplay:
+        environment:
+            - PROVIDER_BASE_URLS=https://meshplay.khulnasoft.com
+            - EVENT=meshplayLocal
+            - KUBECONFIG_FOLDER=/home/appuser/.kube
+            - PORT=9081
+        image: khulnasoft/meshplay:stable-latest
+        labels:
+            - com.centurylinklabs.watchtower.enable=true
+        ports:
+            - 9081:9081
+        volumes:
+            - $HOME/.kube:/home/appuser/.kube:ro
+            - $HOME/.minikube:$HOME/.minikube:ro
+            - /var/run/docker.sock:/var/run/docker.sock
+    meshplay-istio:
+        image: khulnasoft/meshplay-istio:stable-latest
+        labels:
+            - com.centurylinklabs.watchtower.enable=true
+        ports:
+            - 10000:10000
+    watchtower:
+        command: --label-enable
+        image: containrrr/watchtower
+        labels:
+            - com.centurylinklabs.watchtower.enable=true
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+version: "3"

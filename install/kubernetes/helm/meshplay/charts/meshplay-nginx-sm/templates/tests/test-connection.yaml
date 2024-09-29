@@ -1,0 +1,17 @@
+{{- if .Values.testCase.enabled -}}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "meshplay-nginx-sm.fullname" . }}-test-connection"
+  labels:
+{{ include "meshplay-nginx-sm.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args:  ['{{ include "meshplay-nginx-sm.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
+{{- end -}}
